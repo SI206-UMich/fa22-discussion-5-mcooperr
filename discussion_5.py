@@ -4,7 +4,7 @@ import unittest
 def count_a(sentence):
 	total = 0
 	for i in range(len(sentence) - 1):
-		if i == 'a':
+		if sentence[i] == 'a':
 			total += 1
 	return total
 
@@ -28,7 +28,8 @@ class Warehouse:
 
 	# Constructor
 	def __init__(self, items = []):
-		self.items = items[:]
+		self.items = items
+
 
 	# Prints all the items in the warehouse, one on each line.	
 	def print_items(self):
@@ -38,15 +39,31 @@ class Warehouse:
 
 	# Adds an item to the warehouse	
 	def add_item(self, item):
-		pass
+		self.items.append(item)
 
 	# Returns the item in the warehouse with the most stock		
 	def get_max_stock(self):
-		pass
+		if self.items is None:
+			return None
+		maxStock = self.items[0].stock
+		maxItem = self.items[0]
+
+		for item in self.items:
+			if item.stock > maxStock:
+				maxStock = item.stock
+				maxItem = item
+		return maxItem
+
+
 	
 	# Returns the item in the warehouse with the highest price
 	def get_max_price(self):
-		pass	
+		highest = self.items[0]
+
+		for item in self.items:
+			if item.price > highest.price:
+				item = highest
+		return highest
 
 
 
@@ -63,23 +80,38 @@ class TestAllMethods(unittest.TestCase):
 
 	## Check to see whether count_a works
 	def test_count_a(self):
-		pass
+		self.assertEqual(count_a("apples are amazing"), 4, "test_a_1")
 
 
 	## Check to see whether you can add an item to the warehouse
 	def test_add_item(self):
-		pass
+		w = Warehouse()
+		w.add_item(self.item1)
+		self.assertEqual(len(w.items), 1, "test")
 
 
 	## Check to see whether warehouse correctly returns the item with the most stock
 	def test_warehouse_max_stocks(self):
-		pass
-
+		w = Warehouse()
+		w.add_item(self.item1)
+		w.add_item(self.item2)
+		w.add_item(self.item3)
+		w.add_item(self.item4)
+		w.add_item(self.item5)
+		max_stock_name = w.get_max_stock()
+		self.assertEqual(max_stock_name.name, self.item3.name)
 
 	# Check to see whether the warehouse correctly return the item with the highest price
 	def test_warehouse_max_price(self):
-		pass
-		
+		w = Warehouse()
+		w.add_item(self.item1)
+		w.add_item(self.item2)
+		w.add_item(self.item3)
+		w.add_item(self.item4)
+		w.add_item(self.item5)
+		max_price_name = w.get_max_price()
+		self.assertEqual(max_price_name.name, self.item1.name)
+
 
 def main():
 	unittest.main()
